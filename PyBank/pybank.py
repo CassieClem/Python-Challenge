@@ -1,127 +1,86 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 51,
-   "id": "c9419b4a-030a-4bdc-b1ac-b9e5c079a4ac",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Dependencies\n",
-    "import csv\n",
-    "import os\n",
-    "\n",
-    "# file to load and output\n",
-    "\n",
-    "file_to_load = os.path.join(\".\", \"Resources\", \"budget_data.csv\")\n",
-    "\n",
-    "file_to_output = os.path.join(\".\", \"budget_analysis.txt\")\n",
-    "\n",
-    "total_months = 0\n",
-    "total_net = 0\n",
-    "net_change_list =[]\n",
-    "month_of_changes = []\n",
-    "greatest = [\"\", 0]\n",
-    "least = [\"\", 99999999999999999]\n",
-    "\n",
-    "#Read the csv and convert it into a list\n",
-    "with open(file_to_load) as financial_data:\n",
-    "    \n",
-    "    reader = csv.reader(financial_data)\n",
-    "\n",
-    "    # Read the header row\n",
-    "    header = next(reader)\n",
-    "\n",
-    "   # print(f\"Header: {header}\")\n",
-    "    first_row = next(reader)\n",
-    "  \n",
-    "    total_net+= int(first_row[1])\n",
-    "    previous_net = int(first_row[1])\n",
-    "    \n",
-    "    total_months += 1\n",
-    "    \n",
-    "    for row in reader:\n",
-    "        # Track the total\n",
-    "        # total_months = total_months + 1\n",
-    "        total_months += 1\n",
-    "        total_net += int(row[1])\n",
-    "        \n",
-    "        # Track the net change\n",
-    "        net_change = int(row[1]) - previous_net\n",
-    "        previous_net = int(row[1])\n",
-    "        net_change_list.append(net_change)\n",
-    "\n",
-    "\n",
-    "        # Calculate the greatest increase\n",
-    "        if(net_change > greatest[1]):\n",
-    "            greatest[0] = row[0]\n",
-    "            greatest[1] = net_change\n",
-    "            \n",
-    "        # Calculate the greatest decrease\n",
-    "        if(net_change < least[1]):\n",
-    "            least[0] = row[0]\n",
-    "            least[1] = net_change\n",
-    "\n",
-    "\n",
-    "net_monthly_average = sum(net_change_list)/ len(net_change_list)\n",
-    "\n",
-    "output = (\n",
-    "    f\"Financial Analysis\\n\"\n",
-    "    f\"------------------------------\\n\"\n",
-    "    f\"Total Months: {total_months}\\n\"\n",
-    "    f\"Total: ${total_net}\\n\"\n",
-    "    f\"Average Change: ${net_monthly_average:.2f}\\n\"\n",
-    "    f\"Greatest Increase in Profits: {greatest[0]} (${greatest[1]})\\n\"\n",
-    "    f\"Greatest Decrease in Profits: {least[0]} (${least[1]})\"\n",
-    ")\n",
-    "\n",
-    "#print(output)\n",
-    "\n",
-    "\n",
-    "# Financial Analysis\n",
-    "# ----------------------------\n",
-    "# Total Months: 86\n",
-    "# Total: $22564198\n",
-    "# Average Change: $-8311.11\n",
-    "# Greatest Increase in Profits: Aug-16 ($1862002)\n",
-    "# Greatest Decrease in Profits: Feb-14 ($-1825558)\n",
-    "\n",
-    "with open(file_to_output, \"w\") as txt_file:\n",
-    "    txt_file.write(output)\n",
-    "\n",
-    "\n",
-    "\n",
-    "\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "310dc47f-c4bd-42d9-8ef4-973144d05398",
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3 (ipykernel)",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.11.7"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[10]:
+
+
+# Dependencies
+import csv
+import os
+
+#file to load and output
+file_to_load = os.path.join(".", "Resources", "budget_data.csv")
+file_to_output = os.path.join(".", "budget_analysis.txt")
+
+total_months = 0
+total_net = 0
+
+net_change_list = []
+month_of_changes = []
+
+greatest = ['', 0]
+least = ['', 999999999999]
+
+#read the csv and convert it into a list
+with open(file_to_load) as financial_data:
+    
+    reader = csv.reader(financial_data)
+
+    #read the header row
+    header = next(reader)
+
+    #print (f"Header: {header}")
+    first_row = next(reader)
+
+    total_net += int(first_row[1]) # 1088983
+    previous_net = int(first_row[1]) #1088983
+
+    total_months += 1
+
+    for row in reader:
+
+        #track the total
+        #track_months = total_months + 1
+        total_months += 1
+        total_net += int(row[1])
+
+        #track the net change
+        net_change = int(row[1]) - previous_net
+        previous_net = int(row[1])
+        net_change_list.append(net_change)
+
+        #calculate the greatest increase
+        if(net_change > greatest[1]):
+            greatest[0] = row[0]
+            greatest[1] = net_change
+
+        #calculate the greatest decrease
+        if(net_change < least[1]):
+            least[0] = row[0]
+            least[1] = net_change
+            
+net_monthly_average = sum(net_change_list)/ len(net_change_list)
+
+output = (
+    f"Financial Analysis\n"
+    f"-----------------------------\n"
+    f"Total Months: {total_months}\n"
+    f"Total: ${total_net}\n"
+    f"Average Change ${net_monthly_average:.2f}\n"
+    f"Greatest Increase in Profits: {greatest[0]} (${greatest[1]})\n"
+    f"Greatest Decrease in Profits: {least[0]} (${least[1]})\n"
+)
+print(output)
+
+#Financial Analaysis
+#----------------------------
+#Total Months: 86
+#Total: $22564198
+#Average Change: $-8311.11
+#Greatest Increase in Profits: Aug-16 ($1862002)
+#Greatest Decrease in Profits: Feb-14 ($-1825558)
+
+with open(file_to_output, "w") as txt_file:
+    txt_file.write(output)
+    
+
